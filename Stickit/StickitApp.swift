@@ -25,7 +25,7 @@ struct StickitApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NoteListView()
         }
         .modelContainer(sharedModelContainer)
     }
