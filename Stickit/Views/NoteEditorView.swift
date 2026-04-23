@@ -21,7 +21,11 @@ struct NoteEditorView:View{
     var body: some View {
         
         ZStack{
+            Color(hex: viewModel.selectedColor.rawValue)
+                .ignoresSafeArea()
+           
             VStack {
+                atmosphereSection
                 ScrollView{
                     VStack(alignment: .leading,spacing: 0){
                         contentSection
@@ -30,6 +34,54 @@ struct NoteEditorView:View{
             }
             .padding(.horizontal, 18)
 
+        }
+    }
+    
+    
+    private var atmosphereSection: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 14) {
+                    ForEach(NotePalette.allCases) { noteColor in
+                        VStack{
+                            ColorCircleView(
+                                noteColor: noteColor,
+                                isSelected: viewModel.selectedColor == noteColor
+                            ) {
+                                
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    viewModel.selectedColor = noteColor
+
+                                }
+                            }
+                            
+                            Circle()
+                                .fill( viewModel.selectedColor == noteColor ? Color.secondary : Color.clear)
+                                .frame(width: 6, height: 6)
+
+                        }
+                    }
+                }
+                .padding(.vertical, 2)
+                .padding(.trailing, 6)
+            }
+        }
+    }
+    struct ColorCircleView: View {
+        let noteColor: NotePalette
+        let isSelected: Bool
+        let onTap: () -> Void
+        
+        var body: some View {
+            Circle()
+                .fill(noteColor.color)
+                .frame(width: 32, height: 32)
+                .overlay(
+                    Circle().stroke(Color.white.opacity(0.8), lineWidth: 3)
+                )
+                .onTapGesture {
+                    onTap()
+                }
         }
     }
     

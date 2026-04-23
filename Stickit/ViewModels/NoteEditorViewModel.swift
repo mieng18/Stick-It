@@ -13,7 +13,7 @@ import Combine
 final class NoteEditorViewModel: ObservableObject {
     
     @Published var content: String
-
+    @Published var selectedColor: NotePalette
 
     let payload: NoteEditorPayload
 
@@ -24,6 +24,8 @@ final class NoteEditorViewModel: ObservableObject {
         self.payload = payload
 
         self.content = payload.note?.content ?? ""
+        self.selectedColor = NotePalette(rawValue:payload.note?.colorHex ?? NotePalette.ashGray.rawValue) ?? .ashGray
+
         
     }
 

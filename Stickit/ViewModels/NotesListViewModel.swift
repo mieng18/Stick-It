@@ -34,7 +34,7 @@ extension Note {
             Milk 2L, eggs (12), bread, chicken breast, spinach, avocado x2, coffee beans
             """,
             timestamp: Date(),
-            updatedAt: Date(),
+            updatedAt: Date(), color: .blushClay,
             isPinned: true,
         )
     }
@@ -49,7 +49,7 @@ extension Note {
                 Rice, salmon, broccoli, apples, almond milk, yogurt, pasta
                 """,
                 timestamp: Date(),
-                updatedAt: Date(),
+                updatedAt: Date(), color: .ashGray,
                 isPinned: false,
             ),
             
@@ -61,6 +61,7 @@ extension Note {
                 """,
                 timestamp: Date().addingTimeInterval(-3600),
                 updatedAt: Date(),
+                color: .skyBlue,
                 isPinned: false,
             ),
             
@@ -72,6 +73,7 @@ extension Note {
                 """,
                 timestamp: Date().addingTimeInterval(-7200),
                 updatedAt: Date(),
+                color: .softIndigo,
                 isPinned: false,
             ),
             
@@ -83,6 +85,7 @@ extension Note {
                 """,
                 timestamp: Date().addingTimeInterval(-86400),
                 updatedAt: Date(),
+                color: .skyBlue,
                 isPinned: false,
             ),
             
@@ -94,6 +97,7 @@ extension Note {
                 """,
                 timestamp: Date().addingTimeInterval(-200000),
                 updatedAt: Date(),
+                color: .skyBlue,
                 isPinned: false,
             ),
             
@@ -105,6 +109,7 @@ extension Note {
             """,
                 timestamp: Date(),
                 updatedAt: Date(),
+                color: .skyBlue,
                 isPinned: true,
             )
             

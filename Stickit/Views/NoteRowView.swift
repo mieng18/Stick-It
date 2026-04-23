@@ -18,7 +18,7 @@ struct NoteRowView: View {
         VStack(alignment: .leading,spacing: 4){
             ZStack(alignment: .topTrailing) {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.white.opacity(0.8))
+                    .fill(Color(hex: note.colorHex))
                     .frame(maxWidth: .infinity)
                 
                 FoldedCorner()

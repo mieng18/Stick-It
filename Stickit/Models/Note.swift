@@ -15,14 +15,16 @@ final class Note{
     var content: String
     var timestamp: Date
     var updatedAt: Date
+    var colorHex: Int
     var isPinned: Bool = false
     
-    init(id: UUID, content: String, timestamp: Date, updatedAt: Date, isPinned: Bool) {
+    init(id: UUID, content: String, timestamp: Date, updatedAt: Date,color:NotePalette, isPinned: Bool) {
         self.id = id
         self.content = content
         self.timestamp = timestamp
         self.updatedAt = updatedAt
         self.isPinned = isPinned
+        self.colorHex = color.rawValue
     }
     
 }
