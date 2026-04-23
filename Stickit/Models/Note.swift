@@ -8,22 +8,41 @@
 import Foundation
 import SwiftData
 
+
 @Model
 final class Note{
     @Attribute(.unique) var id: UUID
-    var title: String
     var content: String
     var timestamp: Date
     var updatedAt: Date
     var isPinned: Bool = false
     
-    init(id: UUID, title: String, content: String, timestamp: Date, updatedAt: Date, isPinned: Bool) {
+    init(id: UUID, content: String, timestamp: Date, updatedAt: Date, isPinned: Bool) {
         self.id = id
-        self.title = title
         self.content = content
         self.timestamp = timestamp
         self.updatedAt = updatedAt
         self.isPinned = isPinned
     }
     
+}
+
+
+extension Note {
+    
+    var title: String {
+        let lines = content
+            .split(separator: "\n", omittingEmptySubsequences: true)
+        
+        return lines.first.map(String.init) ?? "Note"
+    }
+    
+    var previewLine: String {
+        let lines = content
+            .split(separator: "\n", omittingEmptySubsequences: true)
+        
+        guard lines.count > 1 else { return "" }
+        
+        return lines.dropFirst().joined(separator: " ")
+    }
 }

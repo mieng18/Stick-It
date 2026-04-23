@@ -30,7 +30,7 @@ struct NoteRowView: View {
                     Text(note.title)
                         .font(.headline)
                         .lineLimit(1)
-                    Text(note.content)
+                    Text(note.previewLine)
                         .font(.footnote)
                         .lineLimit(2 )
                         .foregroundStyle(.secondary)

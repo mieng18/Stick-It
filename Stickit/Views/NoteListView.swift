@@ -19,15 +19,23 @@ struct NoteListView: View {
         
         NavigationStack{
             
-            ZStack{
+            ZStack(alignment:.bottomTrailing)
+            {
                 VStack {
                     TopHeader
                     noteContent
                     
                 }
+                addNoteButton
             }
+            
+            .navigationDestination(item: $viewModel.editorPayload) { payload in
+                NoteEditorView(payload: payload)
+                
+            }
+            
         }
-       
+        
     }
     
     
@@ -83,6 +91,24 @@ struct NoteListView: View {
         NoteRowView(
             note: note
         )
+    }
+    
+    var addNoteButton: some View {
+        
+        Button{
+            
+            viewModel.openNewNote()
+            
+        }label: {
+            Image(systemName: "plus")
+                .font(.title.bold())
+                .foregroundStyle(.white)
+                .frame(width: 56, height: 56)
+                .background(
+                    Circle()
+                    .fill(Color.black)
+                )
+        }
     }
     
 }

@@ -15,6 +15,12 @@ import Combine
 final class NotesListViewModel: ObservableObject {
     
     @Published private(set) var notes: [Note] = Note.mocks
+    @Published var editorPayload: NoteEditorPayload? = nil
+    
+    
+    func openNewNote() {
+        editorPayload = NoteEditorPayload(note: nil)
+    }
     
 }
 
@@ -23,8 +29,10 @@ extension Note {
     static var mock: Note {
         Note(
             id: UUID(),
-            title: "Grocery List 🛒",
-            content: "Milk 2L, eggs (12), bread, chicken breast, spinach, avocado x2, coffee beans",
+            content: """
+            Grocery List 🛒
+            Milk 2L, eggs (12), bread, chicken breast, spinach, avocado x2, coffee beans
+            """,
             timestamp: Date(),
             updatedAt: Date(),
             isPinned: true,
@@ -36,8 +44,10 @@ extension Note {
             
             Note(
                 id: UUID(),
-                title: "Weekly Groceries",
-                content: "Rice, salmon, broccoli, apples, almond milk, yogurt, pasta",
+                content: """
+                Weekly Groceries
+                Rice, salmon, broccoli, apples, almond milk, yogurt, pasta
+                """,
                 timestamp: Date(),
                 updatedAt: Date(),
                 isPinned: false,
@@ -45,8 +55,10 @@ extension Note {
             
             Note(
                 id: UUID(),
-                title: "Quick Store Run",
-                content: "Snacks, soda, ice cream",
+                content: """
+                Quick Store Run
+                Snacks, soda, ice cream
+                """,
                 timestamp: Date().addingTimeInterval(-3600),
                 updatedAt: Date(),
                 isPinned: false,
@@ -54,8 +66,10 @@ extension Note {
             
             Note(
                 id: UUID(),
-                title: "Meal Prep Ingredients",
-                content: "Chicken breast, sweet potatoes, green beans, olive oil, garlic",
+                content: """
+                Meal Prep Ingredients
+                Chicken breast, sweet potatoes, green beans, olive oil, garlic
+                """,
                 timestamp: Date().addingTimeInterval(-7200),
                 updatedAt: Date(),
                 isPinned: false,
@@ -63,8 +77,10 @@ extension Note {
             
             Note(
                 id: UUID(),
-                title: "Produce List",
-                content: "Spinach, kale, tomatoes, cucumbers, bananas, blueberries",
+                content: """
+                Produce List
+                Spinach, kale, tomatoes, cucumbers, bananas, blueberries
+                """,
                 timestamp: Date().addingTimeInterval(-86400),
                 updatedAt: Date(),
                 isPinned: false,
@@ -72,8 +88,10 @@ extension Note {
             
             Note(
                 id: UUID(),
-                title: "Dairy Items",
-                content: "Milk, cheese, butter, Greek yogurt",
+                content: """
+                Dairy Items
+                Milk, cheese, butter, Greek yogurt
+                """,
                 timestamp: Date().addingTimeInterval(-200000),
                 updatedAt: Date(),
                 isPinned: false,
@@ -81,14 +99,15 @@ extension Note {
             
             Note(
                 id: UUID(),
-                title: "Bulk Shopping",
-                content: "Paper towels, toilet paper, detergent, bottled water",
+                content: """
+                Bulk Shopping
+                Paper towels, toilet paper, detergent, bottled water
+            """,
                 timestamp: Date(),
                 updatedAt: Date(),
                 isPinned: true,
-            ),
+            )
             
-            mock
         ]
     }
 }
