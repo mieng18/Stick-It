@@ -39,6 +39,7 @@ struct NoteEditorView:View{
                 ScrollView{
                     VStack(alignment: .leading,spacing: 0){
                         contentSection
+                        
                     }
                 }
             }
@@ -145,6 +146,7 @@ struct NoteEditorView:View{
                 .font(.system(size: 20))
                 .scrollContentBackground(.hidden)
                 .foregroundStyle(Color.black.opacity(0.72))
+                .frame(minHeight: 280)
 
         }
     }

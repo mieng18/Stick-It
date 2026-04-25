@@ -23,6 +23,12 @@ final class NotesListViewModel: ObservableObject {
         editorPayload = NoteEditorPayload(note: nil)
     }
     
+    func openEditor(for note: Note) {
+        editorPayload = NoteEditorPayload(note: note)
+    }
+    
+    
+    
     
     func saveNote(payload: NoteEditorPayload, content: String, color: Int) {
         

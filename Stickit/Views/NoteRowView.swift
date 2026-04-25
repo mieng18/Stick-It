@@ -31,12 +31,13 @@ struct NoteRowView: View {
                         .font(.headline)
                         .lineLimit(1)
                     Text(note.previewLine)
-                        .font(.footnote)
+                        .font(.body)
+                        .fontWeight(.light)
                         .lineLimit(2 )
                         .foregroundStyle(.secondary)
                     
                     Text("\(viewModel.displayDate, format: Date.FormatStyle(date: .abbreviated, time: .shortened))")
-                        .font(.caption2)
+                        .font(.footnote)
                         .foregroundStyle(.secondary)
 
                 }

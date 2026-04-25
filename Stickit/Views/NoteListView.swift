@@ -34,6 +34,7 @@ struct NoteListView: View {
                     
                 }
                 addNoteButton
+                    .padding(.horizontal,16)
             }
             
             .navigationDestination(item: $viewModel.editorPayload) { payload in
@@ -64,13 +65,15 @@ struct NoteListView: View {
             Image("StickIt_Logo")
                 .resizable()
                 .scaledToFit()
-                .frame(height: 22
+                .frame(height: 25
                 )
             
             Spacer()
             controlMenu
             
         }
+        .padding(.horizontal,16)
+        .safeAreaPadding(.top)
         
     }
     
@@ -90,6 +93,8 @@ struct NoteListView: View {
         }label: {
             Image(systemName: "ellipsis.circle")
                 .font(.title3)
+                .foregroundColor(.black.opacity(0.8))
+
         }
     }
     
@@ -111,6 +116,9 @@ struct NoteListView: View {
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
+                    }
+                    .onTapGesture {
+                        viewModel.openEditor(for: note)
                     }
             }
        }
