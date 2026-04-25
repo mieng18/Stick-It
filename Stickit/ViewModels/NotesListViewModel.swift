@@ -49,7 +49,16 @@ final class NotesListViewModel: ObservableObject {
     func configure(noteRespositoryProtocol: NoteRepositoryProtocol) {
         self.noteRespositoryProtocol = noteRespositoryProtocol
     }
-
+    
+    
+ 
+    func deleteNote(_ note: Note) {
+        do {
+            try noteRespositoryProtocol?.delete(note)
+        } catch {
+            print("Failed to delete note:", error)
+        }
+    }
   
 
 }

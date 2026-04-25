@@ -17,6 +17,7 @@ struct NoteListView: View {
     @StateObject private var viewModel = NotesListViewModel()
     @Query private var notes: [Note]
     
+    
     private var persistenceService: NotePersistenceService {
         NotePersistenceService(modelContext: modelContext)
     }
@@ -41,7 +42,7 @@ struct NoteListView: View {
                     viewModel.saveNote(payload: payload,content: content, color: color)
 
                 }
-                
+                .navigationBarBackButtonHidden(true)
             }
             
         }
@@ -95,21 +96,33 @@ struct NoteListView: View {
     
     @ViewBuilder
     private var noteContent: some View {
-        ScrollView{
-            LazyVStack{
-                
-                ForEach(notes) {
-                    note in
-                    noteCard(note)
-                }
+        
+        List {
+            
+            ForEach(notes) { note in
+                noteCard(note)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button(role: .destructive) {
+                           
+                            viewModel.deleteNote(note)
+
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
             }
-        }
+       }
+       .listStyle(.plain)
+
     }
     
     private func noteCard(_ note: Note) -> some View {
         NoteRowView(
             note: note
         )
+        
     }
     
     var addNoteButton: some View {

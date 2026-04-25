@@ -11,4 +11,5 @@ import Foundation
 struct NoteDraft{
     let content: String
     let colorHex: Int
+    
 }

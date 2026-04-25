@@ -11,9 +11,13 @@ import SwiftData
 
 protocol NoteRepositoryProtocol {
     func save(payload: NoteEditorPayload,draft: NoteDraft) throws
+    func delete(_ note: Note)throws
+
 }
 
 struct NotePersistenceService: NoteRepositoryProtocol {
+
+    
   
     private let modelContext: ModelContext
     
@@ -37,6 +41,23 @@ struct NotePersistenceService: NoteRepositoryProtocol {
         }
         
         try modelContext.save()
+    }
+    
+    
+    func delete(_ note: Note) throws {
+        modelContext.delete(note)
+        try modelContext.save()
+        
+        persistChanges()
+
+    }
+    
+    private func persistChanges() {
+        do {
+            try modelContext.save()
+        } catch {
+            print("Failed to persist note changes: \(error)")
+        }
     }
 }
 
