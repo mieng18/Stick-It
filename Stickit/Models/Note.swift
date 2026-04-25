@@ -18,7 +18,7 @@ final class Note{
     var colorHex: Int
     var isPinned: Bool = false
     
-    init(id: UUID, content: String, timestamp: Date, updatedAt: Date,color:NotePalette, isPinned: Bool) {
+    init(id: UUID = UUID(), content: String, timestamp: Date, updatedAt: Date,color:NotePalette, isPinned: Bool) {
         self.id = id
         self.content = content
         self.timestamp = timestamp
@@ -48,3 +48,18 @@ extension Note {
         return lines.dropFirst().joined(separator: " ")
     }
 }
+
+
+enum NoteValidationError: LocalizedError {
+    case emptyContent
+
+    var errorDescription: String? {
+        switch self {
+     
+        case .emptyContent:
+            return "The content of the note can't be empty."
+        }
+    }
+}
+
+

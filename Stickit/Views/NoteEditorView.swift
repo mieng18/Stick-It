@@ -11,20 +11,30 @@ import SwiftUI
 
 
 struct NoteEditorView:View{
+    
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel: NoteEditorViewModel
 
     
-    init(payload: NoteEditorPayload) {
-            _viewModel = StateObject(wrappedValue: NoteEditorViewModel(payload: payload))
-        }
+    let onSave: (_ content: String, _ color: Int) -> Void
+
+    
+    init(payload: NoteEditorPayload, onSave:  @escaping (_ content: String, _ color: Int) -> Void) {
+        
+        self.onSave = onSave
+
+        _viewModel = StateObject(wrappedValue: NoteEditorViewModel(payload: payload))
+        
+    }
     var body: some View {
         
         ZStack{
             Color(hex: viewModel.selectedColor.rawValue)
                 .ignoresSafeArea()
-           
+            
             VStack {
+                topBar
+                    .padding(.bottom,20)
                 atmosphereSection
                 ScrollView{
                     VStack(alignment: .leading,spacing: 0){
@@ -34,6 +44,32 @@ struct NoteEditorView:View{
             }
             .padding(.horizontal, 18)
 
+        }
+    }
+    
+    
+    private var topBar: some View {
+        HStack {
+            Button("Cancel"){
+                dismiss()
+            }
+            .font(.system(size:16,weight: .regular,design: .default))
+            .foregroundStyle(.secondary)
+            
+            Spacer()
+            Text(viewModel.screenTitle)
+            
+            Spacer()
+            Button("Save"){
+                
+                if viewModel.save(onSave: onSave) {
+                    dismiss()
+                }
+            }
+            .font(.system(size:16,weight: .regular,design: .default))
+            .foregroundStyle(.secondary)
+
+            
         }
     }
     
@@ -112,6 +148,7 @@ struct NoteEditorView:View{
 
         }
     }
+   
 
 }
 

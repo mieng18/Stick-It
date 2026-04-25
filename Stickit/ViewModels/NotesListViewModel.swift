@@ -13,15 +13,45 @@ import Combine
 
 @MainActor
 final class NotesListViewModel: ObservableObject {
+
+    @Published private(set) var notes:[Note] = []
+    @Published var editorPayload: NoteEditorPayload?
     
-    @Published private(set) var notes: [Note] = Note.mocks
-    @Published var editorPayload: NoteEditorPayload? = nil
-    
+    private var noteRespositoryProtocol: NoteRepositoryProtocol?
     
     func openNewNote() {
         editorPayload = NoteEditorPayload(note: nil)
     }
     
+    
+    func saveNote(payload: NoteEditorPayload, content: String, color: Int) {
+        
+        let draft = NoteDraft(content: content,colorHex: color)
+        do {
+            try noteRespositoryProtocol?.save(payload: payload, draft: draft)
+        } catch {
+            print("Failed to save note:", error)
+            
+        }
+    }
+
+
+    func updateNotes(_ notes: [Note]) {
+        self.notes = notes
+    }
+
+    func configure(modelContext: ModelContext) {
+        if noteRespositoryProtocol == nil {
+            noteRespositoryProtocol = NotePersistenceService(modelContext: modelContext)
+        }
+    }
+  
+    func configure(noteRespositoryProtocol: NoteRepositoryProtocol) {
+        self.noteRespositoryProtocol = noteRespositoryProtocol
+    }
+
+  
+
 }
 
 extension Note {

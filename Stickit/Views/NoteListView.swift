@@ -8,12 +8,18 @@
 
 
 import SwiftUI
+import SwiftData
 
 
 struct NoteListView: View {
+    @Environment(\.modelContext) private var modelContext
     
-    @StateObject var viewModel = NotesListViewModel()
+    @StateObject private var viewModel = NotesListViewModel()
+    @Query private var notes: [Note]
     
+    private var persistenceService: NotePersistenceService {
+        NotePersistenceService(modelContext: modelContext)
+    }
     
     var body: some View {
         
@@ -30,10 +36,22 @@ struct NoteListView: View {
             }
             
             .navigationDestination(item: $viewModel.editorPayload) { payload in
-                NoteEditorView(payload: payload)
+
+                NoteEditorView(payload: payload) { content, color in
+                    viewModel.saveNote(payload: payload,content: content, color: color)
+
+                }
                 
             }
             
+        }
+        
+        .onAppear {
+            viewModel.configure(modelContext: modelContext)
+            viewModel.updateNotes(notes)
+        }
+        .onChange(of: notes) { _, latest in
+            viewModel.updateNotes(latest)
         }
         
     }
@@ -79,7 +97,8 @@ struct NoteListView: View {
     private var noteContent: some View {
         ScrollView{
             LazyVStack{
-                ForEach(viewModel.notes) {
+                
+                ForEach(notes) {
                     note in
                     noteCard(note)
                 }
