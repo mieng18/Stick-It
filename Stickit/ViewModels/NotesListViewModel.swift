@@ -13,11 +13,57 @@ import Combine
 
 @MainActor
 final class NotesListViewModel: ObservableObject {
-
+    
     @Published private(set) var notes:[Note] = []
     @Published var editorPayload: NoteEditorPayload?
+    @Published var sortMode: NoteSortMode
+    
     
     private var noteRespositoryProtocol: NoteRepositoryProtocol?
+    private var noteListDisplayConfigurable: NoteListDisplayConfigurable
+    
+    
+    init(noteListDisplayConfigurable: NoteListDisplayConfigurable? = nil) {
+        let resolvedConfigurable = noteListDisplayConfigurable ?? NoteListPreferencesService()
+        self.noteListDisplayConfigurable = resolvedConfigurable
+        self.sortMode = resolvedConfigurable.sortMode
+    }
+    
+    var displayedNotes: [Note] {
+        notes.sorted { left, right in
+            switch sortMode {
+            case .createNewest:
+                 return left.timestamp > right.timestamp
+            case .createOldest:
+                 return left.timestamp < right.timestamp
+            case .editedNewest:
+                return left.updatedAt > right.updatedAt
+            case .editedOldest:
+                return left.updatedAt < right.updatedAt
+
+            }
+            
+        }
+    }
+    
+    
+    var filteredNotes: [Note] {
+   
+        return displayedNotes
+        
+    }
+
+    
+    var regularNotes: [Note] {
+        filteredNotes.filter { !$0.isPinned }
+    }
+
+    
+    
+    func setSortMode(_ mode: NoteSortMode) {
+        sortMode = mode
+        noteListDisplayConfigurable.sortMode = mode
+    }
     
     func openNewNote() {
         editorPayload = NoteEditorPayload(note: nil)

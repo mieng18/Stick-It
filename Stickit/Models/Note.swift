@@ -63,3 +63,24 @@ enum NoteValidationError: LocalizedError {
 }
 
 
+
+enum NoteSortMode: String, CaseIterable, Identifiable {
+    case createNewest = "Date Created (Newest)"
+    case createOldest = "Date Created (Oldest)"
+    case editedNewest = "Date Edited (Newest)"
+    case editedOldest = "Date Edited (Oldest)"
+    
+    var id: String {rawValue}
+    
+}
+
+extension NoteSortMode {
+    var userCreatedDate: Bool {
+        switch self {
+            case .createNewest, .createOldest: return true
+        case .editedNewest,.editedOldest: return false
+            
+        }
+    }
+}
+

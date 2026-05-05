@@ -11,8 +11,9 @@ import SwiftUI
 
 struct NoteRowView: View {
     let note: Note
+    let sortMode: NoteSortMode
     
-    private var viewModel: NoteRowViewModel{NoteRowViewModel(note: note)}
+    private var viewModel: NoteRowViewModel{NoteRowViewModel(note: note,sortMode: sortMode)}
     
     var body: some View {
         VStack(alignment: .leading,spacing: 4){

@@ -11,9 +11,10 @@ import SwiftUI
 
 struct NoteRowViewModel{
     let note: Note
-    
+    let sortMode: NoteSortMode
+
     var displayDate: Date {
-       note.timestamp
+        sortMode.userCreatedDate ? note.timestamp : note.updatedAt
     }
      
 }
