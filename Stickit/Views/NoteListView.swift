@@ -34,7 +34,8 @@ struct NoteListView: View {
                     
                 }
                 addNoteButton
-                    .padding(.horizontal,16)
+                    .padding(.horizontal,16
+                    )
             }
             
             .navigationDestination(item: $viewModel.editorPayload) { payload in
@@ -90,11 +91,29 @@ struct NoteListView: View {
                 
             }
             
+            Section("Sort By") {
+                ForEach(NoteSortMode.allCases) { mode in
+                    Button {
+                        
+                        viewModel.setSortMode(mode)
+
+                        
+                    } label: {
+                        Label(mode.rawValue,systemImage: viewModel.sortMode == mode ?
+                              "checkmark.circle.fill" : ""
+                        )
+                        .font(.caption)
+                    }
+                }
+            }
+            
         }label: {
             Image(systemName: "ellipsis.circle")
                 .font(.title3)
                 .foregroundColor(.black.opacity(0.8))
 
+            
+          
         }
     }
     
@@ -104,7 +123,7 @@ struct NoteListView: View {
         
         List {
             
-            ForEach(notes) { note in
+            ForEach(viewModel.regularNotes) { note in
                 noteCard(note)
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
@@ -122,13 +141,14 @@ struct NoteListView: View {
                     }
             }
        }
-       .listStyle(.plain)
+        .listStyle(.plain)
 
     }
     
     private func noteCard(_ note: Note) -> some View {
         NoteRowView(
-            note: note
+            note: note,
+            sortMode: viewModel.sortMode
         )
         
     }
