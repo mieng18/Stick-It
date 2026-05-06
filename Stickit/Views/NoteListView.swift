@@ -124,46 +124,47 @@ struct NoteListView: View {
     private var noteContent: some View {
         
         List {
-            Section {
-                if viewModel.showsPinnedNotes {
-                    ForEach(viewModel.pinnedNote) { note in
-                        noteCard(note)
-                    }
-                }
-            } header: {
-                if !viewModel.pinnedNote.isEmpty {
-                    Button {
-                        withAnimation(.easeInOut) {
-                            viewModel.togglePinnedNotesVisibility()
-                        }
-                    } label: {
-                        HStack {
-                            Text("Pinned")
-
-                            Spacer()
-
-                            Image(
-                                systemName: viewModel.showsPinnedNotes
-                                ? "chevron.down"
-                                : "chevron.right"
-                            )
+            if !viewModel.pinnedNote.isEmpty {
+                
+                Section {
+                    if viewModel.showsPinnedNotes {
+                        ForEach(viewModel.pinnedNote) { note in
+                            noteCard(note)
                         }
                     }
-                    .buttonStyle(.plain)
-                    .textCase(nil)
+                } header: {
+                    if !viewModel.pinnedNote.isEmpty {
+                        Button {
+                            withAnimation(.easeInOut) {
+                                viewModel.togglePinnedNotesVisibility()
+                            }
+                        } label: {
+                            HStack {
+                                Text("Pinned")
+
+                                Spacer()
+
+                                Image(
+                                    systemName: viewModel.showsPinnedNotes
+                                    ? "chevron.down"
+                                    : "chevron.right"
+                                )
+                            }
+                        }
+                        .buttonStyle(.plain)
+                        .textCase(nil)
+                    }
                 }
             }
-            
-           
-            
+                
+       
             if !viewModel.regularNotes.isEmpty{
                 ForEach(viewModel.regularNotes) { note in
                     noteCard(note)
                         
                 }
             }
-                
-              
+            
         }
         .listStyle(.plain)
 
@@ -211,8 +212,6 @@ struct NoteListView: View {
 
                 }
                 Button("Delete", role: .destructive) {
-                    viewModel.deleteNote(note)
-
                 }
             }
               

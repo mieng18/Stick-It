@@ -57,7 +57,7 @@ struct NotePersistenceService: NoteRepositoryProtocol {
     
     func togglePinned(note: Note) {
         note.isPinned.toggle()
-        persistChanges()
+        
     }
     
     
