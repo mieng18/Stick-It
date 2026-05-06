@@ -12,10 +12,12 @@ import SwiftData
 protocol NoteRepositoryProtocol {
     func save(payload: NoteEditorPayload,draft: NoteDraft) throws
     func delete(_ note: Note)throws
+    func togglePinned(note: Note)
 
 }
 
 struct NotePersistenceService: NoteRepositoryProtocol {
+
 
     
   
@@ -51,6 +53,13 @@ struct NotePersistenceService: NoteRepositoryProtocol {
         persistChanges()
 
     }
+    
+    
+    func togglePinned(note: Note) {
+        note.isPinned.toggle()
+        persistChanges()
+    }
+    
     
     private func persistChanges() {
         do {

@@ -17,16 +17,18 @@ final class NotesListViewModel: ObservableObject {
     @Published private(set) var notes:[Note] = []
     @Published var editorPayload: NoteEditorPayload?
     @Published var sortMode: NoteSortMode
+    @Published private(set) var showsPinnedNotes: Bool
     
     
-    private var noteRespositoryProtocol: NoteRepositoryProtocol?
-    private var noteListDisplayConfigurable: NoteListDisplayConfigurable
+    private var noteRepository: NoteRepositoryProtocol?
+    private var preferencesService: NoteListPreferencesServicing
     
     
-    init(noteListDisplayConfigurable: NoteListDisplayConfigurable? = nil) {
-        let resolvedConfigurable = noteListDisplayConfigurable ?? NoteListPreferencesService()
-        self.noteListDisplayConfigurable = resolvedConfigurable
-        self.sortMode = resolvedConfigurable.sortMode
+    init(noteListPreferencesServicing: NoteListPreferencesServicing? = nil) {
+        let preferencesService = noteListPreferencesServicing ?? NoteListPreferencesService()
+        self.preferencesService = preferencesService
+        self.sortMode = preferencesService.sortMode
+        self.showsPinnedNotes = preferencesService.showsPinnedNotes
     }
     
     var displayedNotes: [Note] {
@@ -54,6 +56,12 @@ final class NotesListViewModel: ObservableObject {
     }
 
     
+    var pinnedNote: [Note] {
+        filteredNotes.filter(\.isPinned)
+    }
+    
+    
+    
     var regularNotes: [Note] {
         filteredNotes.filter { !$0.isPinned }
     }
@@ -62,7 +70,7 @@ final class NotesListViewModel: ObservableObject {
     
     func setSortMode(_ mode: NoteSortMode) {
         sortMode = mode
-        noteListDisplayConfigurable.sortMode = mode
+        preferencesService.sortMode = mode
     }
     
     func openNewNote() {
@@ -80,7 +88,7 @@ final class NotesListViewModel: ObservableObject {
         
         let draft = NoteDraft(content: content,colorHex: color)
         do {
-            try noteRespositoryProtocol?.save(payload: payload, draft: draft)
+            try noteRepository?.save(payload: payload, draft: draft)
         } catch {
             print("Failed to save note:", error)
             
@@ -91,22 +99,37 @@ final class NotesListViewModel: ObservableObject {
     func updateNotes(_ notes: [Note]) {
         self.notes = notes
     }
+    
+    
+    func togglePinned(_ note: Note){
+        guard let noteRepository else{ return}
+        noteRepository.togglePinned(note: note)
+
+    }
+    
+    func togglePinnedNotesVisibility() {
+
+        showsPinnedNotes.toggle()
+
+        preferencesService.showsPinnedNotes = showsPinnedNotes
+
+    }
 
     func configure(modelContext: ModelContext) {
-        if noteRespositoryProtocol == nil {
-            noteRespositoryProtocol = NotePersistenceService(modelContext: modelContext)
+        if noteRepository == nil {
+            noteRepository = NotePersistenceService(modelContext: modelContext)
         }
     }
   
-    func configure(noteRespositoryProtocol: NoteRepositoryProtocol) {
-        self.noteRespositoryProtocol = noteRespositoryProtocol
+    func configure(noteRepository: NoteRepositoryProtocol) {
+        self.noteRepository = noteRepository
     }
     
     
  
     func deleteNote(_ note: Note) {
         do {
-            try noteRespositoryProtocol?.delete(note)
+            try noteRepository?.delete(note)
         } catch {
             print("Failed to delete note:", error)
         }

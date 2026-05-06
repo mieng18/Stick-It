@@ -9,14 +9,16 @@ import Foundation
 
 
 
-protocol NoteListDisplayConfigurable{
+protocol NoteListPreferencesServicing{
     var sortMode: NoteSortMode {get set}
+    var showsPinnedNotes: Bool { get set }
 }
-final class NoteListPreferencesService: NoteListDisplayConfigurable {
+final class NoteListPreferencesService: NoteListPreferencesServicing {
     
 
     private enum Keys {
         static let sortMode = "stickit.sort_mode"
+        static let showsPinnedNotes = "stickit.shows_pinned_notes"
     }
     
     private let userDefault: UserDefaults
@@ -27,7 +29,7 @@ final class NoteListPreferencesService: NoteListDisplayConfigurable {
     
     
     var sortMode: NoteSortMode {
-        get  {
+        get {
             let rawValue = userDefault.string(forKey: Keys.sortMode) ?? NoteSortMode.editedNewest.rawValue
             return NoteSortMode(rawValue: rawValue) ?? .editedNewest
         }
@@ -36,5 +38,16 @@ final class NoteListPreferencesService: NoteListDisplayConfigurable {
         }
     }
     
-    
+    var showsPinnedNotes: Bool {
+
+        get {
+            userDefault.object(forKey: Keys.showsPinnedNotes) as? Bool ?? true
+        }
+
+        set {
+            userDefault.set(newValue, forKey: Keys.showsPinnedNotes)
+
+        }
+
+    }
 }

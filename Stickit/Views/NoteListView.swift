@@ -31,6 +31,8 @@ struct NoteListView: View {
                 VStack {
                     TopHeader
                     noteContent
+                        .padding(.top,24
+                        )
                     
                 }
                 addNoteButton
@@ -122,25 +124,47 @@ struct NoteListView: View {
     private var noteContent: some View {
         
         List {
-            
-            ForEach(viewModel.regularNotes) { note in
-                noteCard(note)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
-                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button(role: .destructive) {
-                           
-                            viewModel.deleteNote(note)
+            Section {
+                if viewModel.showsPinnedNotes {
+                    ForEach(viewModel.pinnedNote) { note in
+                        noteCard(note)
+                    }
+                }
+            } header: {
+                if !viewModel.pinnedNote.isEmpty {
+                    Button {
+                        withAnimation(.easeInOut) {
+                            viewModel.togglePinnedNotesVisibility()
+                        }
+                    } label: {
+                        HStack {
+                            Text("Pinned")
 
-                        } label: {
-                            Label("Delete", systemImage: "trash")
+                            Spacer()
+
+                            Image(
+                                systemName: viewModel.showsPinnedNotes
+                                ? "chevron.down"
+                                : "chevron.right"
+                            )
                         }
                     }
-                    .onTapGesture {
-                        viewModel.openEditor(for: note)
-                    }
+                    .buttonStyle(.plain)
+                    .textCase(nil)
+                }
             }
-       }
+            
+           
+            
+            if !viewModel.regularNotes.isEmpty{
+                ForEach(viewModel.regularNotes) { note in
+                    noteCard(note)
+                        
+                }
+            }
+                
+              
+        }
         .listStyle(.plain)
 
     }
@@ -150,6 +174,49 @@ struct NoteListView: View {
             note: note,
             sortMode: viewModel.sortMode
         )
+        .listRowSeparator(.hidden)
+        .listRowBackground(Color.clear)
+        .listRowInsets(
+
+           EdgeInsets(
+
+               top: 0,
+
+               leading: 12,
+
+               bottom: 8,
+
+               trailing: 12
+
+           )
+
+        )
+        
+        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+            Button(role: .destructive) {
+               
+                viewModel.deleteNote(note)
+
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+        .onTapGesture {
+            viewModel.openEditor(for: note)
+        }
+        .contextMenu {
+            Button(note.isPinned ? "Unpin" : "Pin") {
+                withAnimation(.spring(response: 0.25, dampingFraction: 0.8)) {
+                    viewModel.togglePinned(note)
+
+                }
+                Button("Delete", role: .destructive) {
+                    viewModel.deleteNote(note)
+
+                }
+            }
+              
+        }
         
     }
     
